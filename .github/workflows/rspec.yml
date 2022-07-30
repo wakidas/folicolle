@@ -35,8 +35,8 @@ jobs:
     steps:
       - name: Setup file system permissions
         run: |
-          sudo chmod -R 777 $GITHUB_WORKSPACE /__w/_temp
-          sudo chmod -R 777 $GITHUB_WORKSPACE /__w/_temp/_runner_file_commands
+          sudo chmod -R 777 $GITHUB_WORKSPACE /github /__w/_temp
+          sudo chmod -R 777 $GITHUB_WORKSPACE /github /__w/_temp/_runner_file_commands
           sudo chmod -R 777 /__w/_temp
           sudo chmod -R 777 /__w/_temp/_runner_file_commands
           echo 'ここから'
