@@ -16,7 +16,7 @@ jobs:
         image: postgres:12
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: ""
           POSTGRES_DB: folicolle_test
         options: >-
           --health-cmd pg_isready
@@ -51,6 +51,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.0
+          bundler-cache: true
         env:
           ImageOS: ubuntu20
       - name: Cache gems
