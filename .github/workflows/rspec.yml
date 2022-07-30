@@ -1,5 +1,4 @@
-name: rspec
-
+name: RSpec
 on:
   push:
     paths-ignore:
@@ -8,97 +7,55 @@ on:
   pull_request:
     types:
       - reopened
-
 jobs:
-  rspec:
+  test:
     runs-on: ubuntu-latest
-
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
     services:
       postgres:
-        image: postgres:13-alpine
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        image: postgres:12
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ""
+          POSTGRES_PASSWORD: postgres
           POSTGRES_DB: folicolle_test
-          POSTGRES_HOST_AUTH_METHOD: trust
-
-#    container:
-#      image: circleci/ruby:3.1.0-node
-#      env:
-#        TZ: Asia/Tokyo
-#        RAILS_ENV: test
-#        PGHOST: postgres
-#        PGUSER: postgres
-
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
-      # This Docker file changes sets USER to circleci instead of using the default user, so we need to update file permissions for this image to work on GH Actions.
-      # See https://docs.github.com/actions/reference/virtual-environments-for-github-hosted-runners#docker-container-filesystem
-      - name: Setup file system permissions
-#        run: sudo chmod -R 777 $GITHUB_WORKSPACE /github /__w/_temp
-#      - uses: actions/checkout@v2
-#      - name: Cache node modules
-#        uses: actions/cache@v2
-#        env:
-#          cache-name: cache-node-modules
-#        with:
-#          path: ~/.yarn
-#          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('/__w/folicolle/folicolle/frontend/yarn.lock') }}
-#          restore-keys: |
-#            ${{ runner.os }}-package-${{ env.cache-name }}-
-#            ${{ runner.os }}-package-
-#            ${{ runner.os }}-
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@ec106b438a1ff6ff109590de34ddc62c540232e0
         with:
-          bundler-cache: true
-      - name: Ruby gem cache
+          ruby-version: 3.0.1
+      - name: Cache gems
         uses: actions/cache@v1
         with:
           path: vendor/bundle
-          key: gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: gems-
-      - name: Install gems
-        run: bundle install --jobs 4 --retry 3 --path vendor/bundle
-#      - name: Cache bundle gems
-#        uses: actions/cache@v2
-#        with:
-#          path: vendor/bundle
-#          key: ${{ runner.os }}-gem-${{ hashFiles('/__w/folicolle/folicolle/Gemfile.lock') }}
-#          restore-keys: |
-#            ${{ runner.os }}-gem-${{ env.cache-name }}-
-#            ${{ runner.os }}-gem-
-#            ${{ runner.os }}-
-#        uses: actions/cache@v2
-#        with:
-#          path: vendor/bundle
-#          key: ${{ runner.os }}-gem-${{ hashFiles('/__w/folicolle/folicolle/Gemfile.lock') }}
-#          restore-keys: |
-#            ${{ runner.os }}-gem-${{ env.cache-name }}-
-#            ${{ runner.os }}-gem-
-#            ${{ runner.os }}-
-#      - name: Set node version
-#        run: |
-#          NODE_VERSION=14.17.0
-#          curl -sSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v${NODE_VERSION}-linux-x64/bin/node
-#          node -v
-#      - name: Install node packages
-#        run: |
-#          cd frontend
-#          yarn install
-#          yarn lint
-#          yarn build
-#          cd -
-#      - name: Install ruby gems
-#        run: |
-#          gem install bundler:2.3.6
-#          bundle config set --local path vendor/bundle
-#          bundle install --jobs 4 --retry 3
-      - name: Setup database/
-        run: bundle exec rails db:setup
-      - name: Run rspec
+          key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gem-
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install --path vendor/bundle --without production
+          yarn install
+      - name: Set env
+        run: |
+          echo '::set-env name=RAILS_ENV::test'
+          echo '::set-env name=DATABASE_URL::postgres://postgres:postgres@localhost:5432/my_database'
+      - name: setup DB
+        run: |
+          bundle exec rails db:schema:load
+      - name: Run tests
         run: bundle exec rspec
