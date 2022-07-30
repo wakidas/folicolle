@@ -38,7 +38,7 @@ jobs:
       # See https://docs.github.com/actions/reference/virtual-environments-for-github-hosted-runners#docker-container-filesystem
       - name: Setup file system permissions
 #        run: sudo chmod -R 777 $GITHUB_WORKSPACE /github /__w/_temp
-      - uses: actions/checkout@v2
+#      - uses: actions/checkout@v2
 #      - name: Cache node modules
 #        uses: actions/cache@v2
 #        env:
@@ -50,20 +50,42 @@ jobs:
 #            ${{ runner.os }}-package-${{ env.cache-name }}-
 #            ${{ runner.os }}-package-
 #            ${{ runner.os }}-
-      - name: Cache bundle gems
-        uses: actions/cache@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Ruby gem cache
+        uses: actions/cache@v1
         with:
           path: vendor/bundle
-          key: ${{ runner.os }}-gem-${{ hashFiles('/__w/folicolle/folicolle/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gem-${{ env.cache-name }}-
-            ${{ runner.os }}-gem-
-            ${{ runner.os }}-
-      - name: Set node version
-        run: |
-          NODE_VERSION=14.17.0
-          curl -sSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v${NODE_VERSION}-linux-x64/bin/node
-          node -v
+          key: gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: gems-
+      - name: Install gems
+        run: bundle install --jobs 4 --retry 3 --path vendor/bundle
+#      - name: Cache bundle gems
+#        uses: actions/cache@v2
+#        with:
+#          path: vendor/bundle
+#          key: ${{ runner.os }}-gem-${{ hashFiles('/__w/folicolle/folicolle/Gemfile.lock') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gem-${{ env.cache-name }}-
+#            ${{ runner.os }}-gem-
+#            ${{ runner.os }}-
+#        uses: actions/cache@v2
+#        with:
+#          path: vendor/bundle
+#          key: ${{ runner.os }}-gem-${{ hashFiles('/__w/folicolle/folicolle/Gemfile.lock') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gem-${{ env.cache-name }}-
+#            ${{ runner.os }}-gem-
+#            ${{ runner.os }}-
+#      - name: Set node version
+#        run: |
+#          NODE_VERSION=14.17.0
+#          curl -sSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v${NODE_VERSION}-linux-x64/bin/node
+#          node -v
 #      - name: Install node packages
 #        run: |
 #          cd frontend
@@ -71,11 +93,11 @@ jobs:
 #          yarn lint
 #          yarn build
 #          cd -
-      - name: Install ruby gems
-        run: |
-          gem install bundler:2.3.6
-          bundle config set --local path vendor/bundle
-          bundle install --jobs 4 --retry 3
+#      - name: Install ruby gems
+#        run: |
+#          gem install bundler:2.3.6
+#          bundle config set --local path vendor/bundle
+#          bundle install --jobs 4 --retry 3
       - name: Setup database/
         run: bundle exec rails db:setup
       - name: Run rspec
