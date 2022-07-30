@@ -11,19 +11,40 @@ jobs:
   test:
 
     runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
-        with:
-          ruby-version: '3.1'
-      - name: Install dependencies
-        run: bundle install
-      - name: Setup database/
-        run: bundle exec rails db:setup
-      - name: Run rspec
-        run: bundle exec rspec
+    services:
+      postgres:
+        image: postgres:13-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: folicolle_test
+          POSTGRES_HOST_AUTH_METHOD: 'trust'
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    container:
+      image: cimg/ruby:3.1.2
+      env:
+        TZ: Asia/Tokyo
+        RAILS_ENV: test
+        PGHOST: postgres
+        PGUSER: postgres
+      steps:
+        - uses: actions/checkout@v3
+        - name: Set up Ruby
+          uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
+          with:
+            ruby-version: '3.1'
+        - name: Install dependencies
+          run: bundle install
+        - name: Setup database/
+          run: bundle exec rails db:setup
+        - name: Run rspec
+          run: bundle exec rspec
 #jobs:
 #  test:
 #    runs-on: ubuntu-latest
