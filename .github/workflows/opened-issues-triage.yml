@@ -2,7 +2,8 @@ name: Move new issues into folicolle development
 on:
   issues:
     types: [opened]
-
+env:
+  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 jobs:
   automate-project-columns:
     runs-on: ubuntu-latest
@@ -10,5 +11,4 @@ jobs:
       - uses: srggrs/assign-one-project-github-action@1.2.1
         with:
           project: https://github.com/users/wakidas/projects/1
-          column: Todo
-          repo-token: ${{ secrets.GH_TOKEN }}
+          column_name: Todo
