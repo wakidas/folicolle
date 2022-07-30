@@ -9,6 +9,6 @@ jobs:
     steps:
       - uses: alex-page/github-project-automation-plus@v0.8.1
         with:
-          project: folicolle
+          project: https://github.com/users/wakidas/projects/1
           column: Todo
           repo-token: ${{ secrets.GH_TOKEN }}
