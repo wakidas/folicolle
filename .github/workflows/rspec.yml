@@ -45,6 +45,9 @@ jobs:
           echo $GITHUB_WORKSPACE
           echo $GITHUB_WORKSPACE /github /__w/_temp
           echo $GITHUB_WORKSPACE /__w/_temp
+          ls -la /__w/
+          ls -la $GITHUB_WORKSPACE
+          ls -la /github
       - uses: actions/checkout@v3
       - name: Set up Ruby
         uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
