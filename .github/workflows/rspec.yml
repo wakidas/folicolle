@@ -25,13 +25,13 @@ jobs:
           POSTGRES_DB: folicolle_test
           POSTGRES_HOST_AUTH_METHOD: trust
 
-    container:
-      image: circleci/ruby:3.1.0-node
-      env:
-        TZ: Asia/Tokyo
-        RAILS_ENV: test
-        PGHOST: postgres
-        PGUSER: postgres
+#    container:
+#      image: circleci/ruby:3.1.0-node
+#      env:
+#        TZ: Asia/Tokyo
+#        RAILS_ENV: test
+#        PGHOST: postgres
+#        PGUSER: postgres
 
     steps:
       # This Docker file changes sets USER to circleci instead of using the default user, so we need to update file permissions for this image to work on GH Actions.
@@ -39,17 +39,17 @@ jobs:
       - name: Setup file system permissions
         run: sudo chmod -R 777 $GITHUB_WORKSPACE /github /__w/_temp
       - uses: actions/checkout@v2
-      - name: Cache node modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.yarn
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('/__w/folicolle/folicolle/frontend/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-package-${{ env.cache-name }}-
-            ${{ runner.os }}-package-
-            ${{ runner.os }}-
+#      - name: Cache node modules
+#        uses: actions/cache@v2
+#        env:
+#          cache-name: cache-node-modules
+#        with:
+#          path: ~/.yarn
+#          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('/__w/folicolle/folicolle/frontend/yarn.lock') }}
+#          restore-keys: |
+#            ${{ runner.os }}-package-${{ env.cache-name }}-
+#            ${{ runner.os }}-package-
+#            ${{ runner.os }}-
       - name: Cache bundle gems
         uses: actions/cache@v2
         with:
