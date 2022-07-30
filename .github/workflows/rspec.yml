@@ -1,0 +1,82 @@
+name: rspec
+
+on:
+  push:
+    paths-ignore:
+      - README.md
+      - .gitignore
+  pull_request:
+    types:
+      - reopened
+
+jobs:
+  rspec:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13-alpine
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ""
+          POSTGRES_DB: folicolle_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+
+    container:
+      image: circleci/ruby:3.0.3-node
+      env:
+        TZ: Asia/Tokyo
+        RAILS_ENV: test
+        PGHOST: postgres
+        PGUSER: postgres
+
+    steps:
+      # This Docker file changes sets USER to circleci instead of using the default user, so we need to update file permissions for this image to work on GH Actions.
+      # See https://docs.github.com/actions/reference/virtual-environments-for-github-hosted-runners#docker-container-filesystem
+      - name: Setup file system permissions
+        run: sudo chmod -R 777 $GITHUB_WORKSPACE /github /__w/_temp
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.yarn
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('/__w/folicolle/folicolle/frontend/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-package-${{ env.cache-name }}-
+            ${{ runner.os }}-package-
+            ${{ runner.os }}-
+      - name: Cache bundle gems
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gem-${{ hashFiles('/__w/folicolle/folicolle/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gem-${{ env.cache-name }}-
+            ${{ runner.os }}-gem-
+            ${{ runner.os }}-
+      - name: Set node version
+        run: |
+          NODE_VERSION=14.17.0
+          curl -sSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v${NODE_VERSION}-linux-x64/bin/node
+          node -v
+#      - name: Install node packages
+#        run: |
+#          cd frontend
+#          yarn install
+#          yarn lint
+#          yarn build
+#          cd -
+      - name: Install ruby gems
+        run: |
+          gem install bundler:2.3.6
+          bundle config set --local path vendor/bundle
+          bundle install --jobs 4 --retry 3
+      - name: Setup database/
+        run: bundle exec rails db:setup
+      - name: Run rspec
+        run: bundle exec rspec
