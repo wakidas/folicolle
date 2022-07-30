@@ -33,11 +33,23 @@ jobs:
         PGHOST: postgres
         PGUSER: postgres
     steps:
+      - name: Setup file system permissions
+        run: |
+          sudo chown -R  circleci $GITHUB_WORKSPACE /github /__w/_temp
+          sudo chmod -R 777 $GITHUB_WORKSPACE /github /__w/_temp
+          sudo chmod -R 777 $GITHUB_WORKSPACE /github /__w/_temp/_runner_file_commands
+          sudo chmod -R 777 /__w/_temp
+          sudo chmod -R 777 /__w/_temp/_runner_file_commands
+          echo 'ここから'
+          whoami
+          echo $GITHUB_WORKSPACE
+          echo $GITHUB_WORKSPACE /github /__w/_temp
+          echo $GITHUB_WORKSPACE /__w/_temp
       - uses: actions/checkout@v3
       - name: Set up Ruby
         uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
-#        with:
-#          ruby-version: '3.1.0'
+        with:
+          ruby-version: '3.1.0'
       - name: Install dependencies
         run: bundle install
       - name: Setup database/
