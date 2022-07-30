@@ -26,7 +26,7 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
 
     container:
-      image: circleci/ruby:3.0.3-node
+      image: circleci/ruby:3.1.0-node
       env:
         TZ: Asia/Tokyo
         RAILS_ENV: test
