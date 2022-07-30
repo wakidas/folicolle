@@ -40,7 +40,7 @@ jobs:
           sudo chmod -R 777 /__w/_temp
           sudo chmod -R 777 /__w/_temp/_runner_file_commands
           echo 'ここから'
-          echo whoami
+          whoami
           echo $GITHUB_WORKSPACE
           echo $GITHUB_WORKSPACE /github /__w/_temp
           echo $GITHUB_WORKSPACE /__w/_temp 
