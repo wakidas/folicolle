@@ -47,9 +47,9 @@ jobs:
           echo $GITHUB_WORKSPACE /github /__w/_temp
           echo $GITHUB_WORKSPACE /__w/_temp 
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
         with:
           ruby-version: 3.1.0
           bundler-cache: true
