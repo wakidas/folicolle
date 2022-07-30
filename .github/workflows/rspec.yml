@@ -34,7 +34,13 @@ jobs:
         PGUSER: postgres
     steps:
       - name: Setup file system permissions
-        run: sudo chmod -R 777 $GITHUB_WORKSPACE /__w/_temp
+        run: |
+          sudo chmod -R 777 $GITHUB_WORKSPACE /__w/_temp
+          echo 'ここから'
+          echo $GITHUB_WORKSPACE
+          echo $GITHUB_WORKSPACE /github /__w/_temp
+          echo $GITHUB_WORKSPACE /__w/_temp 
+
       - uses: actions/checkout@v2
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
