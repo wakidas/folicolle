@@ -35,19 +35,7 @@ jobs:
     steps:
       - name: Setup file system permissions
         run: |
-#          sudo chown -R root $GITHUB_WORKSPACE /github /__w/_temp
           sudo chmod -R 777 $GITHUB_WORKSPACE /github /__w/_temp
-#          sudo chmod -R 777 $GITHUB_WORKSPACE /github /__w/_temp/_runner_file_commands
-#          sudo chmod -R 777 /__w/_temp
-#          sudo chmod -R 777 /__w/_temp/_runner_file_commands
-#          echo 'ここから'
-#          whoami
-#          echo $GITHUB_WORKSPACE
-#          echo $GITHUB_WORKSPACE /github /__w/_temp
-#          echo $GITHUB_WORKSPACE /__w/_temp
-#          ls -la /__w/
-#          ls -la $GITHUB_WORKSPACE
-#          ls -la /github
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: bundle install
