@@ -8,7 +8,7 @@ on:
     types:
       - reopened
 jobs:
-  test:
+  rspec:
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -33,10 +33,10 @@ jobs:
         PGHOST: postgres
         PGUSER: postgres
     steps:
-#      - name: Setup file system permissions
-#        run: |
+      - name: Setup file system permissions
+        run: |
 #          sudo chown -R root $GITHUB_WORKSPACE /github /__w/_temp
-#          sudo chmod -R 777 $GITHUB_WORKSPACE /github /__w/_temp
+          sudo chmod -R 777 $GITHUB_WORKSPACE /github /__w/_temp
 #          sudo chmod -R 777 $GITHUB_WORKSPACE /github /__w/_temp/_runner_file_commands
 #          sudo chmod -R 777 /__w/_temp
 #          sudo chmod -R 777 /__w/_temp/_runner_file_commands
