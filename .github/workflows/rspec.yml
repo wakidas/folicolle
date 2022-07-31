@@ -42,3 +42,10 @@ jobs:
         run: bundle exec rails db:setup
       - name: Run rspec
         run: bundle exec rspec
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./coverage/coverage.xml
+          flags: unittests
+          name: ruby-sample-for-codecov
+          fail_ci_if_error: true
