@@ -50,6 +50,7 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'bootsnap', require: false
 
 gem 'config'
+gem 'devise'
 gem 'paper_trail'
 
 # Use Sass to process CSS
