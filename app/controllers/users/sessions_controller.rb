@@ -6,19 +6,10 @@ class Users::SessionsController < Devise::SessionsController
   # after_action :create_user_login_history!, only: [:create]
 
   # GET /resource/sign_in
-  def new
-    super
-  end
 
   # POST /resource/sign_in
-  def create
-    super
-  end
 
   # DELETE /resource/sign_out
-  def destroy
-    super
-  end
 
   private
 

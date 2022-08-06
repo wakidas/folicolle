@@ -4,30 +4,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
   layout 'layouts/application'
 
   # GET /resource/sign_up
-  def new
-    super
-    # binding.pry
-  end
 
   # POST /resource
-  def create
-    super
-  end
 
   # GET /resource/edit
-  def edit
-    super
-  end
 
   # PUT /resource
-  def update
-    super
-  end
 
   # DELETE /resource
-  def destroy
-    super
-  end
 
   # def complete
   #   @a8_sales_order = "yup-#{Time.current.strftime("%Y%m%d%H%M%S")}-#{params[:sales_order]}"
@@ -44,8 +28,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # def cancel
   #   super
   # end
-
-  protected
 
   # If you have extra params to permit, append them to the sanitizer.
   # def configure_sign_up_params
