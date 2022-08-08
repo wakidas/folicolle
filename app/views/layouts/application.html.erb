@@ -12,6 +12,12 @@
   </head>
 
   <body>
+  <div>
+  <%= button_to('Log out', destroy_user_session_path, method: :delete) %>
+  </div>
+  <div>
+  <%= link_to 'log in', new_user_session_path %>
+    </div>
     <main class="container mx-auto mt-28 px-5 flex">
       <%= render partial: 'layouts/flash_messages' %>
       <%= yield %>
