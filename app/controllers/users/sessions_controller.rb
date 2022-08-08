@@ -6,22 +6,10 @@ class Users::SessionsController < Devise::SessionsController
   # after_action :create_user_login_history!, only: [:create]
 
   # GET /resource/sign_in
-  def new
-    super
-  end
 
   # POST /resource/sign_in
-  def create
-    # binding.pry
-    super
-  end
 
   # DELETE /resource/sign_out
-  def destroy
-    super
-    # binding.pry
-    # redirect_to new_user_session_path, notice: 'ログアウトした'
-  end
 
   private
 
@@ -29,7 +17,7 @@ class Users::SessionsController < Devise::SessionsController
   #   stored_location_for(resource) || root_path
   # end
 
-  def after_sign_out_path_for(resource)
+  def after_sign_out_path_for(_resource)
     new_user_session_path
   end
 end
