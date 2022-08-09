@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: products
@@ -18,13 +20,12 @@
 #
 #  fk_rails_...  (user_id => users.id)
 #
+FactoryBot.define do
+  factory :product do
+    association :user, :confirmed
 
-# This model initially had no columns defined. If you add columns to the
-# model remove the "{}" from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-# column: value
+    title { 'タイトル' }
+    body { '渾身の力作です' }
+    url { 'http://example.com' }
+  end
+end
