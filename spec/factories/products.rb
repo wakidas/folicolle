@@ -20,6 +20,7 @@
 #
 #  fk_rails_...  (user_id => users.id)
 #
+
 FactoryBot.define do
   factory :product do
     association :user, :confirmed
