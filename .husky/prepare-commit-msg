@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+git secrets --prepare_commit_msg_hook -- "$@"
+
+echo 'commit-msg'
+echo $@
+
+COMMIT_EDITMSG=$1
+BRANCH_NAME=$(git branch | grep '*' | sed 's/* //')
+INSERTED_BRANCH_NAME=["$BRANCH_NAME"]
+
+addBranchName() {
+  DESCRIPTION=$(git config branch."$BRANCH_NAME".description)
+  echo "$INSERTED_BRANCH_NAME: $(cat $COMMIT_EDITMSG)" > $COMMIT_EDITMSG
+  if [ -n "$DESCRIPTION" ]
+  then
+     echo "" >> $COMMIT_EDITMSG
+     echo $DESCRIPTION >> $COMMIT_EDITMSG
+  fi
+}
+
+MERGE_MESSAGE=$(cat $COMMIT_EDITMSG|grep -i 'merge'|wc -l)
+REBASE_MESSAGE=$(cat $COMMIT_EDITMSG|grep -i "rebasing"|wc -l)
+if [ $REBASE_MESSAGE -eq 0 ] && [ $MERGE_MESSAGE -eq 0 ] ; then
+  addBranchName
+fi
