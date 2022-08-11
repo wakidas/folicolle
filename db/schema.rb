@@ -15,8 +15,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_010101) do
   enable_extension "plpgsql"
 
   create_table "products", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "title", null: false
+    t.text "body"
+    t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_products_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -46,4 +51,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_010101) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "products", "users"
 end
