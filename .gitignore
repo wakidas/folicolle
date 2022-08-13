@@ -43,3 +43,4 @@
 /coverage/*
 
 /node_modules
+/config/credentials/development.key
