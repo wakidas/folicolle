@@ -1,0 +1,30 @@
+ja:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'バリデーションに失敗しました: %{errors}'
+        restrict_dependent_destroy:
+          has_one: "%{record}が存在しているので削除できません"
+          has_many: "%{record}が存在しているので削除できません"
+        blank: を入力してください
+      models:
+        user:
+          attributes:
+            base:
+#              cannot_cancel_by_not_completing_repayment: 返済が終了していない利用があるため退会できません
+    models:
+      user: ユーザー
+      company: 事業者
+      representative: 代表者
+      invoice: 請求書
+      prefecture: 都道府県
+    attributes:
+      user:
+        email: メールアドレス
+#        password: パスワード
+#        password_confirmation: 確認用パスワード
+#        company_id: 事業者
+#        referral_code_id: 紹介コード
+#        registered_referral_code_id: 登録した紹介コード
+#        register_referral_code: 登録しようとしている紹介コード
+#        reason_for_cancellation: 退会理由

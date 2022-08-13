@@ -52,6 +52,7 @@ gem 'bootsnap', require: false
 gem 'config'
 gem 'devise'
 gem 'paper_trail'
+gem 'rails-i18n'
 gem 'validate_url'
 
 # Use Sass to process CSS
