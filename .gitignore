@@ -44,3 +44,5 @@
 
 /node_modules
 /config/credentials/development.key
+
+/config/credentials/production.key
