@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class DeviseMailer < Devise::Mailer
+  include Devise::Mailers::Helpers
+  default from: 'フォリコレ運営 <noreply@folicolle.jp>'
   layout 'mailer'
 
   # def confirmation_instructions(record, token, _opts = {})
@@ -15,15 +17,15 @@ class DeviseMailer < Devise::Mailer
   #   end
   # end
 
-  def reset_password_instructions(record, _token, _opts = {})
-    # @token = token
-    # devise_mail(record, :reset_password_instructions, opts)
+  def reset_password_instructions(record, token, opts = {})
+    @token = token
+    devise_mail(record, :reset_password_instructions, opts)
+  end
 
-    mail(
-      to: record.email,
-      # subject:,
-    ) do |format|
-      format.html { render template: 'devise/users/mailer/reset_password_instructions' }
-    end
+  # TODO: 検証終わったら消す #84
+  def test
+    @greeting = 'Hi'
+
+    mail to: 'ymnkknt3@gmail.com'
   end
 end

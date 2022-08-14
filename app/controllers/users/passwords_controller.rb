@@ -3,12 +3,9 @@
 class Users::PasswordsController < Devise::PasswordsController
   layout 'layouts/application'
 
-  def create
-    self.resource = resource_class.send_reset_password_instructions(resource_params)
-    yield resource if block_given?
+  private
 
-    successfully_sent?(resource)
-    # flash.clear
-    redirect_to new_user_session_path
+  def after_sending_reset_password_instructions_path_for(_resource_name)
+    new_user_session_path
   end
 end
