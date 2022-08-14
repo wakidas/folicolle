@@ -24,7 +24,7 @@ class DeviseMailer < Devise::Mailer
 
   # TODO: 検証終わったら消す #84
   def test
-    @greeting = 'Hi'
+    @greeting = 'Hii'
 
     mail to: 'ymnkknt3@gmail.com'
   end
