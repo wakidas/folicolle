@@ -1,3 +1,2 @@
-host: localhost
 annotate:
   is_enabled: true
