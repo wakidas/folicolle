@@ -41,7 +41,7 @@ Rails.application.configure do
   # ActionMailer
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_caching = false
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.default_url_options = { host: Rails.application.credentials.config[:mail_host], port: 3000 }
 
   # ActionMailer Setting with AWS SES
   config.action_mailer.delivery_method = :ses
