@@ -17,11 +17,10 @@ class Users::PasswordsController < Devise::PasswordsController
       else
         set_flash_message!(:notice, :updated_not_active)
       end
-      redirect_to after_resetting_password_path_for(resource)
     else
       set_minimum_password_length
-      respond_with resource
     end
+    redirect_to after_resetting_password_path_for(resource)
   end
 
   private
