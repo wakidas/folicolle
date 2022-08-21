@@ -1,0 +1,5 @@
+annotate:
+  is_enabled: false
+url_options:
+  protocol: https
+  host: <%= ENV['WEB_HOST'] %>
